@@ -87,7 +87,7 @@ int main(int argc,char** argv)
 
   runManager->SetVerboseLevel(0);
   runManager->Initialize();
-  fDetectorConstruction->SetThicknessOfPMMA(6.0*CLHEP::cm);
+  fDetectorConstruction->SetThicknessOfPMMA(0.3*CLHEP::cm);
   
 
   
