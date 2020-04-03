@@ -52,6 +52,7 @@ set(GEOFAC_SCRIPTS
   #run2.mac
   vis.mac
   batch.mac
+  AFR.c
   )
 
 foreach(_script ${GEOFAC_SCRIPTS})

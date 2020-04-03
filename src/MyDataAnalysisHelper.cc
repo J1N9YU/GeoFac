@@ -139,7 +139,17 @@ void MyDataAnalysisHelper::ProcessRecord(){
 }
 
 void MyDataAnalysisHelper::TestRandom(){
+    int num = 10000;
     fRunManager = G4RunManager::GetRunManager();
     GeoFacPrimaryGeneratorAction* GPGA = (GeoFacPrimaryGeneratorAction*)fRunManager->GetUserPrimaryGeneratorAction();
+    G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
+    fAnalysisManager->OpenFile("testrandom");
+    fAnalysisManager->CreateH2("h1","random pos histogram",100,-4*CLHEP::cm,4*CLHEP::cm,100,-4*CLHEP::cm,4*CLHEP::cm);
+    for(int i=0;i<num;i++){
+        G4ThreeVector pos = GPGA->GetRandomPosition();
+        fAnalysisManager->FillH2(0,pos.getX(),pos.getZ());
+    }
+    fAnalysisManager->Write();
+    fAnalysisManager->CloseFile();
     
 }

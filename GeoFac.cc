@@ -123,7 +123,7 @@ int main(int argc,char** argv)
       }
       myHelper->WriteToFile();
 
-    }else if(fileName=='-t'){
+    }else if(fileName=="-t"){
       myHelper->TestRandom();
     }
     else{

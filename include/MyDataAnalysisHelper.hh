@@ -10,6 +10,9 @@
 #include <iomanip>
 #include "G4RunManager.hh"
 #include "GeoFacPrimaryGeneratorAction.hh"
+#include "G4AnalysisMessenger.hh"
+
+#include "g4root.hh"
 
 
 
