@@ -123,7 +123,10 @@ int main(int argc,char** argv)
       }
       myHelper->WriteToFile();
 
-    }else{
+    }else if(fileName=='-t'){
+      myHelper->TestRandom();
+    }
+    else{
       G4String command = "/control/execute ";    
       UImanager->ApplyCommand(command+fileName);
     }

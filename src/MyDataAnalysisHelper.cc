@@ -139,5 +139,7 @@ void MyDataAnalysisHelper::ProcessRecord(){
 }
 
 void MyDataAnalysisHelper::TestRandom(){
-    //test here
+    fRunManager = G4RunManager::GetRunManager();
+    GeoFacPrimaryGeneratorAction* GPGA = (GeoFacPrimaryGeneratorAction*)fRunManager->GetUserPrimaryGeneratorAction();
+    
 }

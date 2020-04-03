@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <iomanip>
 #include "G4RunManager.hh"
+#include "GeoFacPrimaryGeneratorAction.hh"
+
 
 
 using namespace std;
