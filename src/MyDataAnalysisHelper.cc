@@ -67,7 +67,7 @@ void MyDataAnalysisHelper::WriteToFile(){
         file<<"Total\tGeoFac"<<endl;
         for(int i=0;i<record.size();i++){
         file<<record[i].total<<"\t"<<GReemitV[i]/GSourceV[i]<<endl;
-    }
+        }
     }
 
 
@@ -145,9 +145,13 @@ void MyDataAnalysisHelper::TestRandom(){
     G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
     fAnalysisManager->OpenFile("testrandom");
     fAnalysisManager->CreateH2("h1","random pos histogram",100,-4*CLHEP::cm,4*CLHEP::cm,100,-4*CLHEP::cm,4*CLHEP::cm);
+    fAnalysisManager->CreateH1("h2","random dir histogram",20,-CLHEP::pi,0);
     for(int i=0;i<num;i++){
         G4ThreeVector pos = GPGA->GetRandomPosition();
+        G4ThreeVector dir = GPGA->GetRandomDirection();
         fAnalysisManager->FillH2(0,pos.getX(),pos.getZ());
+        double theta = atan(sqrt(dir.getX()*dir.getX()+dir.getZ()*dir.getZ())/dir.getY());
+        fAnalysisManager->FillH1(0,theta);
     }
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
