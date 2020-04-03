@@ -11,6 +11,12 @@
 #include "G4RunManager.hh"
 #include "GeoFacPrimaryGeneratorAction.hh"
 
+#include "TROOT.h"
+#include "TH1F.h"
+#include "TH2F.h"
+#include "TFile.h"
+#include "TGraph.h"
+#include "TArrayD.h"
 
 
 using namespace std;

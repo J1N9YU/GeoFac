@@ -139,7 +139,37 @@ void MyDataAnalysisHelper::ProcessRecord(){
 }
 
 void MyDataAnalysisHelper::TestRandom(){
+    int num = 10000;
     fRunManager = G4RunManager::GetRunManager();
     GeoFacPrimaryGeneratorAction* GPGA = (GeoFacPrimaryGeneratorAction*)fRunManager->GetUserPrimaryGeneratorAction();
+    vector<G4ThreeVector> posVec;
+    vector<G4ThreeVector> dirVec;
+    //testing
+    for(int i=0;i<num;i++){
+        posVec.push_back(GPGA->GetRandomPosition());
+        
+    }
+
+    //display result
+    TH2F* h1 = new TH2F("h1","a simple histogram",100,-4*CLHEP::cm,4*CLHEP::cm,100,-4*CLHEP::cm,4*CLHEP::cm);
+    TFile* tfile = new TFile("h1.root","RECREATE");
+    
+
+
+
+
+    //ofstream file("RandomTest.txt",ios::trunc);
+    for(int i=0;i<num;i++){
+        double x = posVec[i].getX();
+        double y = posVec[i].getY();
+        double z = posVec[i].getZ();
+        //file<<x<<"\t"<<y<<"\t"<<z<<endl;
+
+        
+        h1->Fill(x,z);
+    }
+    tfile->cd();
+    h1->Write();
+    //file.close();
     
 }
