@@ -8,6 +8,7 @@
 #include <vector>
 #include <algorithm>
 #include <iomanip>
+#include "G4RunManager.hh"
 
 
 using namespace std;
@@ -32,16 +33,19 @@ class MyDataAnalysisHelper{
         void WriteToRecord();
         inline int GetHitCount(){return hitCount;};
         inline int GetTotalCount(){return totalCount;};
-        inline void SetDeltaTick(clock_t delta){deltaTick=delta;};
+        inline void SetDeltaTick(clock_t delta){deltaTick=delta;totalTimeCost+=delta/CLOCKS_PER_SEC;}
         inline void SetSavingMode(bool mode){isSaving=mode;}
         inline void SetNumThreads(int num){numThread = num;}
         inline void SetRepeats(int num){reapeatEachThread = num;};
         inline void SetExperimentType(string t){experimentType = t;}
         static MyDataAnalysisHelper* GetInstance();
+        void TestRandom();
     
     private:
 
         static MyDataAnalysisHelper* fInstance;
+        
+        G4RunManager* fRunManager;
         int hitCount;
         int totalCount;
         clock_t deltaTick;
@@ -50,9 +54,10 @@ class MyDataAnalysisHelper{
         int reapeatEachThread;
         vector<RunRecord> record;
         string experimentType;
-        G4double GSourceLatest;
-        G4double GReemitLatest;
+        vector<G4double> GSourceV;
+        vector<G4double> GReemitV;
         void ProcessRecord();
+        double totalTimeCost;
         
 
 

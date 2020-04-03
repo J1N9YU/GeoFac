@@ -12,8 +12,8 @@ MyDataAnalysisHelper::MyDataAnalysisHelper(){
     numThread=1;
     reapeatEachThread = 1;
     experimentType = "undefined";
-    GReemitLatest = 0;
-    GSourceLatest = 0;
+    fRunManager = G4RunManager::GetRunManager();
+    totalTimeCost = 0;
 }
 
 MyDataAnalysisHelper::~MyDataAnalysisHelper(){
@@ -34,16 +34,13 @@ void MyDataAnalysisHelper::Clear(){
 }
 
 void MyDataAnalysisHelper::WriteToFile(){
-    if(!isSaving){
+      if(!isSaving){
         G4cout<<"Saving is off"<<G4endl;
         return;
     }
     if(numThread!=1)ProcessRecord();
 
-    //Getting the reuslt with most amount of runs.
-    G4double GLatest = record[record.size()-1].ratio;
-    if(experimentType=="source")GSourceLatest = GLatest;
-    else if(experimentType=="reemit")GReemitLatest = GLatest;
+
 
     //Writeing record to file
     G4cout<<"saving result to file..."<<G4endl;
@@ -53,7 +50,7 @@ void MyDataAnalysisHelper::WriteToFile(){
     tm* now_tm= localtime(&now);
     string now_str = asctime(now_tm);
     //wtrite table head
-    file<<endl<<now_str<<"type = "<<experimentType;
+    file<<endl<<now_str<<"type = "<<experimentType<<endl;
     file<<"index\ttotal\thit\tratio\ttime\t";
     if(numThread!=1)file<<"stdev\tnumTread = "<<numThread;
     file<<endl;
@@ -64,11 +61,27 @@ void MyDataAnalysisHelper::WriteToFile(){
         if(numThread!=1)file<<"\t"<<r.stdev;
         file<<endl;
     }
+    //Write final result
+    if(!GReemitV.empty()&&!GSourceV.empty()){
+        file<<endl<<"final result is:"<<endl;
+        file<<"Total\tGeoFac"<<endl;
+        for(int i=0;i<record.size();i++){
+        file<<record[i].total<<"\t"<<GReemitV[i]/GSourceV[i]<<endl;
+    }
+    }
+
+
+
+
+
     file.close();
     record.clear();
     G4cout<<"saving done!"<<G4endl;
+    G4cout<<"Job done! It took "<<totalTimeCost<<" s in total."<<G4endl;
+
+
     
-    if(GSourceLatest!=0&&GReemitLatest!=0)G4cout<<"The result of geometry factor is:\t"<<GReemitLatest/GSourceLatest<<G4endl;
+
 }
 
 
@@ -114,4 +127,17 @@ void MyDataAnalysisHelper::ProcessRecord(){
     }
     //record.insert(record.end(),newRec.begin(),newRec.end());
     swap(record,newRec);
+
+    //seperate G value
+    for(auto r:record){
+        if(experimentType=="source")GSourceV.push_back(r.ratio);
+        if(experimentType=="reemit")GReemitV.push_back(r.ratio);
+    }
+    
+
+
+}
+
+void MyDataAnalysisHelper::TestRandom(){
+    //test here
 }
