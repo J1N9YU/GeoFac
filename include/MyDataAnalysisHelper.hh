@@ -50,8 +50,8 @@ class MyDataAnalysisHelper{
         int reapeatEachThread;
         vector<RunRecord> record;
         string experimentType;
-        G4double GSourceLatest;
-        G4double GReemitLatest;
+        vector<G4double> GSourceV;
+        vector<G4double> GReemitV;
         void ProcessRecord();
         
 

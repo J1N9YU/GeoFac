@@ -42,7 +42,7 @@ int main(int argc,char** argv)
   // Construct the default run manager
   //
   int numTreads = 3;
-  int repeatEachThread =1 ;
+  int repeatEachThread =3 ;
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(numTreads);
@@ -97,11 +97,11 @@ int main(int argc,char** argv)
 
   if ( ! ui ) { 
     G4String fileName = argv[1];
-    if(fileName=="convergence"){
+    if(fileName=="convergence"||fileName=="-c"){
       
       int start = 15;
       int step = 1;
-      int n = 11;
+      int n = 5;
       //source light geometry
       fDetectorConstruction->SetThicknessOfPMMA(0.3*CLHEP::cm);
       myHelper->SetExperimentType("source");
