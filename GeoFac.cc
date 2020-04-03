@@ -55,6 +55,7 @@ int main(int argc,char** argv)
   // Detector construction
   runManager->SetUserInitialization(new GeoFacDetectorConstruction());
   GeoFacDetectorConstruction* fDetectorConstruction = (GeoFacDetectorConstruction*)runManager->GetUserDetectorConstruction();
+  fDetectorConstruction->SetIsOriginModel(true);
 
   // Physics list
   G4VModularPhysicsList* physicsList = new LBE;

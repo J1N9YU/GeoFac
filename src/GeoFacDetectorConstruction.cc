@@ -28,7 +28,7 @@ GeoFacDetectorConstruction::GeoFacDetectorConstruction()
   fMaterials = GeoFacMaterials::GetInstance();
   thicknessOfPMMA = 0.3*cm;
   PMMA_pv = NULL;
-
+  isOriginModel=false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -124,6 +124,7 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
   //----------------------------------------------------------------------    
   // shell edge (SHELL1)
   //----------------------------------------------------------------------
+  if(!isOriginModel)
   {
   G4double innerRaduis = 0.5*cm;
   G4double outerRadius = 0.55*cm;
@@ -158,6 +159,7 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
   //----------------------------------------------------------------------    
   // shell buttom (SHELL2)
   //----------------------------------------------------------------------
+  if(!isOriginModel)
   {
   G4double innerRaduis = 0.0*cm;
   G4double outerRadius = 0.6*cm;
@@ -194,6 +196,7 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
   //----------------------------------------------------------------------    
   //PCB
   //----------------------------------------------------------------------
+  if(!isOriginModel)
   { 
   G4double dim_x = 5.0*cm;
   G4double dim_y = 0.1*cm;
@@ -208,6 +211,7 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
     new G4LogicalVolume(PCB_solid,         //its solid
                         PCB_mat,          //its material
                         "PCB_lv");           //its name
+
 
   G4VPhysicalVolume* PCB_pv =        
   new G4PVPlacement(0,                       //no rotation
@@ -300,4 +304,8 @@ void GeoFacDetectorConstruction::ConstructPMMA(){
   PMMA_pv = new G4PVPlacement(rm,pos,PMMA_lv,"PMMA_pl",logicWorld,false,0);
   
   }
+}
+
+void GeoFacDetectorConstruction::SetIsOriginModel(bool is){
+  isOriginModel=is;
 }

@@ -55,15 +55,18 @@ class GeoFacDetectorConstruction : public G4VUserDetectorConstruction
     virtual void ConstructSDandField();
     G4Material* FindMaterial(G4String);
 
-    inline G4double GetThicknessOfPMMA(){return thicknessOfPMMA;};
+    inline G4double GetThicknessOfPMMA(){return thicknessOfPMMA;}
+    void SetIsOriginModel(bool);
     void SetThicknessOfPMMA(G4double num);
     void ConstructPMMA();
+
   protected:
     GeoFacMaterials* fMaterials;
     G4Cache<GeoFacPhotonDetSD*> fmppcSD;
     G4double thicknessOfPMMA;
     G4VPhysicalVolume* PMMA_pv;
     G4LogicalVolume* logicWorld;
+    bool isOriginModel;
 
 };
 
