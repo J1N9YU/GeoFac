@@ -43,7 +43,7 @@ int main(int argc,char** argv)
   // Construct the default run manager
   //
   int numTreads = 3;
-  int repeatEachThread =10 ;
+  int repeatEachThread =4 ;
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(numTreads);
@@ -104,7 +104,7 @@ int main(int argc,char** argv)
       
       int start = 16;
       int step = 1;
-      int n = 15;
+      int n = 13;
       //source light geometry
       fDetectorConstruction->SetThicknessOfPMMA(0);
       myHelper->SetExperimentType("source");
