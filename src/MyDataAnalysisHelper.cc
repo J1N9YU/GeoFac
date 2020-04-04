@@ -145,7 +145,7 @@ void MyDataAnalysisHelper::TestRandom(){
     G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
     fAnalysisManager->OpenFile("testrandom");
     fAnalysisManager->CreateH2("h1","random pos histogram",100,-4*CLHEP::cm,4*CLHEP::cm,100,-4*CLHEP::cm,4*CLHEP::cm);
-    fAnalysisManager->CreateH1("h2","random dir histogram",20,-CLHEP::pi,0);
+    fAnalysisManager->CreateH1("h2","random dir histogram",10,-0.6*CLHEP::pi,0);
     for(int i=0;i<num;i++){
         G4ThreeVector pos = GPGA->GetRandomPosition();
         G4ThreeVector dir = GPGA->GetRandomDirection();
