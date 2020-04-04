@@ -91,8 +91,6 @@ int main(int argc,char** argv)
   myHelper->SetSavingMode(true);
 
   runManager->SetVerboseLevel(0);
-  runManager->Initialize();
-  fDetectorConstruction->SetThicknessOfPMMA(0.3*CLHEP::cm);
   
 
   
@@ -141,6 +139,7 @@ int main(int argc,char** argv)
     // interactive mode
     //fGPGA->SetTestMode(true);
     UImanager->ApplyCommand("/control/execute init_vis.mac");
+    UImanager->ApplyCommand("/run/numberOfThreads 1");
 
     ui->SessionStart();
     delete ui;

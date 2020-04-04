@@ -98,7 +98,7 @@ G4ThreeVector GeoFacPrimaryGeneratorAction::GetSpecificPosition(){
   GeoFacDetectorConstruction* dc = (GeoFacDetectorConstruction*)(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   G4double x = 0.2*cm;
   G4double z = 0;
-  G4double y = 0.36*cm+dc->GetThicknessOfPMMA();                        //altitude
+  G4double y = 0.30*cm+dc->GetThicknessOfPMMA();                        //altitude
   return G4ThreeVector(x,y,z);
 }
 
