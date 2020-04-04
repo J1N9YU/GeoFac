@@ -13,7 +13,7 @@
 using namespace std;
 
 typedef struct RnuRecord{
-    int total;
+    float total;
     int hit;
     double ratio;
     double stdev;
@@ -38,6 +38,8 @@ class MyDataAnalysisHelper{
         inline void SetRepeats(int num){reapeatEachThread = num;};
         inline void SetExperimentType(string t){experimentType = t;}
         static MyDataAnalysisHelper* GetInstance();
+
+        
     
     private:
 
@@ -50,9 +52,14 @@ class MyDataAnalysisHelper{
         int reapeatEachThread;
         vector<RunRecord> record;
         string experimentType;
-        vector<G4double> GSourceV;
-        vector<G4double> GReemitV;
+
+        //Keeping the origin data of each run
+        vector<RunRecord> GSourceV;
+        vector<RunRecord> GReemitV;
+
+        //process data
         void ProcessRecord();
+        vector<RunRecord> GetRunRatio(vector<RunRecord> a,vector<RunRecord> b);
         
 
 

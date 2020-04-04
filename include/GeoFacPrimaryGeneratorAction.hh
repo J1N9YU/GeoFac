@@ -39,7 +39,7 @@ class GeoFacPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   
   private:
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
-    bool isTestMode;
+    bool isTestMode;              // in test mode, particle gun shoot photon with specific positiong and direction instead of random generating them.
 
 
 

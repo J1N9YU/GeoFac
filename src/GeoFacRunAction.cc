@@ -47,7 +47,7 @@ GeoFacRunAction::GeoFacRunAction()
 { 
 
   // Register accumulable to the accumulable manager
-  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  //G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   fMDAH = MyDataAnalysisHelper::GetInstance();
 
 
@@ -83,7 +83,7 @@ void GeoFacRunAction::BeginOfRunAction(const G4Run* aRun)
 
 void GeoFacRunAction::EndOfRunAction(const G4Run* run)
 {
-  G4int nofEvents = run->GetNumberOfEvent();
+  //G4int nofEvents = run->GetNumberOfEvent();
 
 
 

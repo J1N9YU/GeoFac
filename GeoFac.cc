@@ -43,7 +43,7 @@ int main(int argc,char** argv)
   // Construct the default run manager
   //
   int numTreads = 3;
-  int repeatEachThread =6 ;
+  int repeatEachThread =10 ;
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(numTreads);
@@ -56,7 +56,7 @@ int main(int argc,char** argv)
   // Detector construction
   runManager->SetUserInitialization(new GeoFacDetectorConstruction());
   GeoFacDetectorConstruction* fDetectorConstruction = (GeoFacDetectorConstruction*)runManager->GetUserDetectorConstruction();
-  fDetectorConstruction->SetIsOriginModel(true);
+  fDetectorConstruction->SetIsOriginModel(false);
 
   // Physics list
   G4VModularPhysicsList* physicsList = new LBE;
@@ -91,6 +91,7 @@ int main(int argc,char** argv)
   myHelper->SetSavingMode(true);
 
   runManager->SetVerboseLevel(0);
+  if(!ui)runManager->Initialize();
   
 
   
@@ -101,11 +102,11 @@ int main(int argc,char** argv)
     G4String fileName = argv[1];
     if(fileName=="convergence"||fileName=="-c"){
       
-      int start = 30;
+      int start = 16;
       int step = 1;
-      int n = 1;
+      int n = 15;
       //source light geometry
-      fDetectorConstruction->SetThicknessOfPMMA(0.3*CLHEP::cm);
+      fDetectorConstruction->SetThicknessOfPMMA(0);
       myHelper->SetExperimentType("source");
       for(int i=0;i<n;i++){
         int eventCnt = start + i*step;
@@ -118,7 +119,7 @@ int main(int argc,char** argv)
       myHelper->WriteToFile();  
       
       //remission light geometry
-      fDetectorConstruction->SetThicknessOfPMMA(1.583*CLHEP::cm);
+      fDetectorConstruction->SetThicknessOfPMMA(0.283*CLHEP::cm);
       myHelper->SetExperimentType("reemit");
       for(int i=0;i<n;i++){
         int eventCnt = start + i*step;

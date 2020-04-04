@@ -26,7 +26,7 @@ GeoFacDetectorConstruction::GeoFacDetectorConstruction()
 : G4VUserDetectorConstruction()
 {
   fMaterials = GeoFacMaterials::GetInstance();
-  thicknessOfPMMA = 0.3*cm;
+  thicknessOfPMMA = 0.0*cm;
   PMMA_pv = NULL;
   isOriginModel=false;
 }
@@ -90,7 +90,7 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
   G4double dim_x = 0.26*cm;
   G4double dim_y = 0.05*cm;
   G4double dim_z = 0.26*cm;
-  G4ThreeVector pos = G4ThreeVector(0*cm, dim_y+0.2*cm, 0*cm);
+  G4ThreeVector pos = G4ThreeVector(0*cm, dim_y, 0*cm);
 
   G4Material* SiPD_mat = FindMaterial("SiPD");
 
@@ -280,6 +280,7 @@ void GeoFacDetectorConstruction::SetThicknessOfPMMA(G4double num){
 void GeoFacDetectorConstruction::ConstructPMMA(){
 {
   if(PMMA_pv!=NULL)delete PMMA_pv;
+  if(thicknessOfPMMA==0)return;
   //hz = 0.583/2 or 0.3/2
   G4double outerRadius = 2.486*cm;
   G4double hz = thicknessOfPMMA/2;

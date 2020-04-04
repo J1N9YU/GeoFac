@@ -31,7 +31,7 @@ GeoFacPrimaryGeneratorAction::GeoFacPrimaryGeneratorAction()
     = particleTable->FindParticle(particleName="opticalphoton");
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticleEnergy(energy);
-  isTestMode=true;
+  isTestMode=false;
 }
 
 

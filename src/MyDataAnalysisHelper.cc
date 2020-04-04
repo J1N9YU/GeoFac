@@ -61,10 +61,11 @@ void MyDataAnalysisHelper::WriteToFile(){
     }
     //Write final result
     if(!GReemitV.empty()&&!GSourceV.empty()){
-        file<<endl<<"final result is:"<<endl;
-        file<<"Total\tGeoFac"<<endl;
-        for(int i=0;i<record.size();i++){
-        file<<record[i].total<<"\t"<<GReemitV[i]/GSourceV[i]<<endl;
+        record=GetRunRatio(GReemitV,GSourceV);
+        ProcessRecord();
+        file<<"total\tGeoFac\tStdev\ttime"<<endl;
+        for(auto r:record){
+            file<<r.total<<"\t"<<r.ratio<<"\t"<<r.stdev<<"\t"<<r.comsumedTick/CLOCKS_PER_SEC<<endl;
         }
     }
     record.clear();
@@ -93,10 +94,16 @@ void MyDataAnalysisHelper::ProcessRecord(){
     int realNumThread = (numThread+1)*reapeatEachThread;
     int n = record.size()/realNumThread;
     if(record.size()%realNumThread!=0){G4cout<<"ProcessRecord Error, skip processing"<<G4endl;return;}
-    vector<double> rv;
-    vector<int> hv;
-    vector<clock_t> cv;
+
+    for(auto r:record){
+        if(experimentType=="source")GSourceV.push_back(r);
+        if(experimentType=="reemit")GReemitV.push_back(r);
+    }
+
     for(int i=0;i<n;i++){
+        vector<double> rv;
+        vector<int> hv;
+        vector<clock_t> cv;
         for(int j=0;j<realNumThread;j++){
             int index= i*realNumThread+j;
             rv.push_back(record[index].ratio);
@@ -105,7 +112,7 @@ void MyDataAnalysisHelper::ProcessRecord(){
         }
         RunRecord r;
         r.total = record[i*realNumThread].total;
-        r.hit= accumulate(hv.begin(),hv.end(),0)/hv.size();
+        r.hit= accumulate(hv.begin(),hv.end(),0.0)/hv.size();
         r.ratio=(double)accumulate(rv.begin(),rv.end(),0.0)/rv.size();
         r.comsumedTick = accumulate(cv.begin(),cv.end(),0)/cv.size();
         double mean = r.ratio;
@@ -122,9 +129,25 @@ void MyDataAnalysisHelper::ProcessRecord(){
     swap(record,newRec);
 
     //seperate G value
-    for(auto r:record){
-        if(experimentType=="source")GSourceV.push_back(r.ratio);
-        if(experimentType=="reemit")GReemitV.push_back(r.ratio);
-    }
+
+
+    //This line is to keep the unprocessed data after process data is done.
+    //record.insert(record.begin(),newRec.begin(),newRec.end());
     
+}
+
+vector<RunRecord> MyDataAnalysisHelper::GetRunRatio(vector<RunRecord> a,vector<RunRecord> b){
+    vector<RunRecord> newRec;
+    if(a.size()!=b.size()){
+        G4cout<<"GetRunRatio error! Size of inputs are different"<<G4endl;
+    }
+    int n = a.size();
+    for(int i=0;i<n;i++){
+        RunRecord r;
+        r.total = a[i].total;
+        r.comsumedTick = a[i].comsumedTick+b[i].comsumedTick;
+        r.ratio = (float)a[i].hit/b[i].hit;
+        newRec.push_back(r);
+    }
+    return newRec;
 }
