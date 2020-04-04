@@ -32,10 +32,15 @@ class GeoFacPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     G4ThreeVector GetRandomDirection();
     G4ThreeVector GetRandomPosition();
+    G4ThreeVector GetSpecificDirection();
+    G4ThreeVector GetSpecificPosition();
     void SetRandomOptPhotonPolar();
+    inline void SetTestMode(bool mode){isTestMode=mode;}
   
   private:
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
+    bool isTestMode;
+
 
 
 };

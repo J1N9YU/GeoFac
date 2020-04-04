@@ -30,8 +30,8 @@ GeoFacPrimaryGeneratorAction::GeoFacPrimaryGeneratorAction()
   G4ParticleDefinition* particle
     = particleTable->FindParticle(particleName="opticalphoton");
   fParticleGun->SetParticleDefinition(particle);
-  
   fParticleGun->SetParticleEnergy(energy);
+  isTestMode=true;
 }
 
 
@@ -46,8 +46,14 @@ GeoFacPrimaryGeneratorAction::~GeoFacPrimaryGeneratorAction()
 void GeoFacPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //code for each inital event
-  fParticleGun->SetParticleMomentumDirection(GetRandomDirection());
-  fParticleGun->SetParticlePosition(GetRandomPosition());
+  if(!isTestMode){
+    fParticleGun->SetParticleMomentumDirection(GetRandomDirection());
+    fParticleGun->SetParticlePosition(GetRandomPosition());
+  }else{
+    fParticleGun->SetParticleMomentumDirection(GetSpecificDirection());
+    fParticleGun->SetParticlePosition(GetSpecificPosition());
+  }
+
   SetRandomOptPhotonPolar();
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
@@ -74,6 +80,24 @@ G4ThreeVector GeoFacPrimaryGeneratorAction::GetRandomPosition(){
   G4double R = sqrt(R2);
   G4double x = R*cos(theta);
   G4double z = R*sin(theta);
+  G4double y = 0.36*cm+dc->GetThicknessOfPMMA();                        //altitude
+  return G4ThreeVector(x,y,z);
+}
+
+G4ThreeVector GeoFacPrimaryGeneratorAction::GetSpecificDirection(){
+  G4double theta = 0.01;
+  G4double phi = 0.55*CLHEP::pi;                               
+  G4double x = cos(theta)*sin(phi);
+  G4double z = sin(theta)*sin(phi);
+  G4double y = cos(phi);
+  G4ThreeVector direction(x,y,z);
+  return direction;
+}
+
+G4ThreeVector GeoFacPrimaryGeneratorAction::GetSpecificPosition(){
+  GeoFacDetectorConstruction* dc = (GeoFacDetectorConstruction*)(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+  G4double x = 0.2*cm;
+  G4double z = 0;
   G4double y = 0.36*cm+dc->GetThicknessOfPMMA();                        //altitude
   return G4ThreeVector(x,y,z);
 }

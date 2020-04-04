@@ -24,6 +24,7 @@
 #include "MyDataAnalysisHelper.hh"
 #include "globals.hh"
 #include "G4GeometryManager.hh"
+#include "GeoFacPrimaryGeneratorAction.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
@@ -63,6 +64,9 @@ int main(int argc,char** argv)
   physicsList->RegisterPhysics(opticalPhysics);
   physicsList->SetVerboseLevel(0);
   runManager->SetUserInitialization(physicsList);
+
+  //Primary Generator Action
+  GeoFacPrimaryGeneratorAction* fGPGA = (GeoFacPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
   
   
     
@@ -135,6 +139,7 @@ int main(int argc,char** argv)
   }
   else { 
     // interactive mode
+    //fGPGA->SetTestMode(true);
     UImanager->ApplyCommand("/control/execute init_vis.mac");
 
     ui->SessionStart();
