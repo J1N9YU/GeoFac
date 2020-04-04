@@ -90,7 +90,7 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
   G4double dim_x = 0.26*cm;
   G4double dim_y = 0.05*cm;
   G4double dim_z = 0.26*cm;
-  G4ThreeVector pos = G4ThreeVector(0*cm, dim_y, 0*cm);
+  G4ThreeVector pos = G4ThreeVector(0*cm, dim_y+0.2*cm, 0*cm);
 
   G4Material* SiPD_mat = FindMaterial("SiPD");
 

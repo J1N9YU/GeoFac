@@ -42,7 +42,7 @@ int main(int argc,char** argv)
   // Construct the default run manager
   //
   int numTreads = 3;
-  int repeatEachThread =3 ;
+  int repeatEachThread =6 ;
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(numTreads);
@@ -99,9 +99,9 @@ int main(int argc,char** argv)
     G4String fileName = argv[1];
     if(fileName=="convergence"||fileName=="-c"){
       
-      int start = 15;
+      int start = 30;
       int step = 1;
-      int n = 5;
+      int n = 1;
       //source light geometry
       fDetectorConstruction->SetThicknessOfPMMA(0.3*CLHEP::cm);
       myHelper->SetExperimentType("source");
@@ -116,7 +116,7 @@ int main(int argc,char** argv)
       myHelper->WriteToFile();  
       
       //remission light geometry
-      fDetectorConstruction->SetThicknessOfPMMA(0.583*CLHEP::cm);
+      fDetectorConstruction->SetThicknessOfPMMA(1.583*CLHEP::cm);
       myHelper->SetExperimentType("reemit");
       for(int i=0;i<n;i++){
         int eventCnt = start + i*step;
