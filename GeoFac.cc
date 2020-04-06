@@ -43,7 +43,7 @@ int main(int argc,char** argv)
   // Construct the default run manager
   //
   int numTreads = 3;
-  int repeatEachThread =4 ;
+  int repeatEachThread =10 ;
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(numTreads);
