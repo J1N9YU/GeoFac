@@ -26,7 +26,7 @@ GeoFacDetectorConstruction::GeoFacDetectorConstruction()
 : G4VUserDetectorConstruction()
 {
   fMaterials = GeoFacMaterials::GetInstance();
-  thicknessOfPMMA = 0.0*cm;
+  thicknessOfPMMA = 0.283*cm;
   PMMA_pv = NULL;
   isOriginModel=false;
 }

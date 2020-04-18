@@ -32,6 +32,7 @@
 /vis/viewer/set/style wireframe
 /vis/viewer/set/auxiliaryEdge true
 /vis/viewer/set/lineSegmentsPerCircle 100
+/vis/viewer/set/background white
 #
 # Draw smooth trajectories at end of event, showing trajectory points
 # as markers 2 pixels wide:
@@ -54,7 +55,7 @@
 # Name
 /vis/set/textColour green
 /vis/set/textLayout right
-/vis/scene/add/text2D 0.9 -.9 24 ! ! GeoFac
+#/vis/scene/add/text2D 0.9 -.9 24 ! ! GeoFac
 # or, if your system does not support right-adjustment
 #/vis/scene/add/text2D 0 -.9 24 ! ! exampleB1
 /vis/set/textLayout    # Revert to normal (left adjusted) layout
@@ -62,7 +63,7 @@
 #
 # Axes, scale, etc.
 /vis/scene/add/scale   # Simple scale line
-/vis/scene/add/axes 0 0 0 5.0 cm     # Simple axes: x=red, y=green, z=blue.
+#/vis/scene/add/axes 0 0 0 5.0 cm     # Simple axes: x=red, y=green, z=blue.
 /vis/scene/add/eventID # Drawn at end of event
 /vis/scene/add/date    # Date stamp
 #
