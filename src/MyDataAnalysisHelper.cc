@@ -31,6 +31,7 @@ void MyDataAnalysisHelper::Clear(){
     totalCount=0;
 }
 
+//write vector "record" to file while copying it to corresponding "Gsource" of "GReemit" vector
 void MyDataAnalysisHelper::WriteToFile(){
      if(!isSaving){
         G4cout<<"Saving is off"<<G4endl;
@@ -79,7 +80,7 @@ void MyDataAnalysisHelper::WriteToFile(){
 }
 
 
-
+//Write the result of each run to vector "record"
 void MyDataAnalysisHelper::WriteToRecord(){
     RnuRecord rec;
     rec.total = totalCount;
@@ -93,7 +94,11 @@ void MyDataAnalysisHelper::ProcessRecord(){
     vector<RunRecord> newRec;
     int realNumThread = (numThread+1)*reapeatEachThread;
     int n = record.size()/realNumThread;
-    if(record.size()%realNumThread!=0){G4cout<<"ProcessRecord Error, skip processing"<<G4endl;return;}
+    if(record.size()%realNumThread!=0){
+        G4cout<<"ProcessRecord Error, skip processing"<<G4endl;
+        G4cout<<"size is "<<record.size()<<G4endl;
+        return;
+    }
 
     for(auto r:record){
         if(experimentType=="source")GSourceV.push_back(r);
