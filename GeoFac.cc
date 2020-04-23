@@ -104,7 +104,7 @@ int main(int argc,char** argv)
       
       int start = 16;
       int step = 1;
-      int n = 13;
+      int n = 15;
       //source light geometry
       fDetectorConstruction->SetThicknessOfPMMA(0);
       myHelper->SetExperimentType("source");
