@@ -60,9 +60,12 @@ void MyDataAnalysisHelper::WriteToFile(){
         file<<endl;
     }
     //Write final result
+    
     if(!GReemitV.empty()&&!GSourceV.empty()){
         record=GetRunRatio(GReemitV,GSourceV);
         ProcessRecord();
+        file<<endl;
+        file<<"Type = GeometryFactor"<<endl;
         file<<"total\tGeoFac\tStdev\ttime"<<endl;
         for(auto r:record){
             file<<r.total<<"\t"<<r.ratio<<"\t"<<r.stdev<<"\t"<<r.comsumedTick/CLOCKS_PER_SEC<<endl;

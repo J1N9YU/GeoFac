@@ -43,7 +43,7 @@ int main(int argc,char** argv)
   // Construct the default run manager
   //
   int numTreads = 1;
-  int repeatEachThread =10 ;
+  int repeatEachThread =2 ;
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(numTreads);
@@ -104,8 +104,26 @@ int main(int argc,char** argv)
       
       int start = 16;
       int step = 1;
-      int n = 13;
+      int n = 5;
+
+      
+      //remission light geometry
+      fDetectorConstruction->SetThicknessOfPMMA(0.283*CLHEP::cm);
+      myHelper->SetExperimentType("reemit");
+      G4cout<<"Starting reemission simulation"<<G4endl;
+      for(int i=0;i<n;i++){
+        int eventCnt = start + i*step;
+        double p = (double)eventCnt/5.0;
+        eventCnt = pow10(p);
+        for(int j=0;j<repeatEachThread;j++){
+          runManager->BeamOn(eventCnt);
+        }
+      }
+      myHelper->WriteToFile();
+      G4cout<<"Reemission ob done!!"<<G4endl;
+
       //source light geometry
+      G4cout<<"Starting source light simulation"<<G4endl;
       fDetectorConstruction->SetThicknessOfPMMA(0);
       myHelper->SetExperimentType("source");
       for(int i=0;i<n;i++){
@@ -116,20 +134,8 @@ int main(int argc,char** argv)
           runManager->BeamOn(eventCnt);
         }
       }
-      myHelper->WriteToFile();  
-      
-      //remission light geometry
-      fDetectorConstruction->SetThicknessOfPMMA(0.283*CLHEP::cm);
-      myHelper->SetExperimentType("reemit");
-      for(int i=0;i<n;i++){
-        int eventCnt = start + i*step;
-        double p = (double)eventCnt/5.0;
-        eventCnt = pow10(p);
-        for(int j=0;j<repeatEachThread;j++){
-          runManager->BeamOn(eventCnt);
-        }
-      }
-      myHelper->WriteToFile();
+      myHelper->WriteToFile(); 
+      G4cout<<"Source light ob done!!"<<G4endl;
 
     }else{
       G4String command = "/control/execute ";    
@@ -139,6 +145,8 @@ int main(int argc,char** argv)
   else { 
     // interactive mode
     //fGPGA->SetTestMode(true);
+    fDetectorConstruction->SetThicknessOfPMMA(0.0*CLHEP::cm);
+    fDetectorConstruction->SetThicknessOfPMMA(0.283*CLHEP::cm);
     UImanager->ApplyCommand("/control/execute init_vis.mac");
     UImanager->ApplyCommand("/run/numberOfThreads 1");
 

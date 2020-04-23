@@ -274,14 +274,19 @@ void GeoFacDetectorConstruction::ConstructSDandField(){
 void GeoFacDetectorConstruction::SetThicknessOfPMMA(G4double num){
   thicknessOfPMMA = num;
   ConstructPMMA();
+  
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  
 }
 
 void GeoFacDetectorConstruction::ConstructPMMA(){
 {
-  if(PMMA_pv!=NULL)delete PMMA_pv;
+  
+  //if(PMMA_pv!=NULL)delete PMMA_pv;//this line cause segmentaion fault
+  G4cout<<"makeing new pmma"<<G4endl;
   if(thicknessOfPMMA==0)return;
   //hz = 0.583/2 or 0.3/2
+  G4cout<<"Constructing PMMA "<<G4endl;
   G4double outerRadius = 2.486*cm;
   G4double hz = thicknessOfPMMA/2;
   G4double startAngle = 0.0 *deg;
