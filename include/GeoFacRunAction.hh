@@ -27,10 +27,13 @@ class GeoFacRunAction : public G4UserRunAction
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
 
+    void AddHits(int n =1);
+
 
   private:
     MyDataAnalysisHelper* fMDAH;
     clock_t startTick;
+    G4Accumulable<int> hits;
 
 };
 

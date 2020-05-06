@@ -53,7 +53,7 @@ void GeoFacEventAction::EndOfEventAction(const G4Event* evt)
   {
      G4int n_hit = mppcHC->entries();
      if(n_hit!=0){
-        fMDAH->AddHit();
+        fRunAction->AddHits();
       }
   }
 }

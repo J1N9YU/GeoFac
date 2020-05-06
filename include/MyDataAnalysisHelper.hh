@@ -25,6 +25,7 @@ class MyDataAnalysisHelper{
         MyDataAnalysisHelper();
         ~MyDataAnalysisHelper();
         void AddHit();
+        inline void SetHit(int n){hitCount=n;}
         inline void AddTotal(int n=1){totalCount+=n;};
         double GetHitRatio();
         void WriteToFile();

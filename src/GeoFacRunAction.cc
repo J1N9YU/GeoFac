@@ -45,12 +45,15 @@
 
 
 GeoFacRunAction::GeoFacRunAction()
-: G4UserRunAction()
+: G4UserRunAction(),hits(0)
 { 
 
-  // Register accumulable to the accumulable manager
-  //G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  
   fMDAH = MyDataAnalysisHelper::GetInstance();
+
+  // Register accumulable to the accumulable manager
+  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->RegisterAccumulable(hits);
 
 
 }
@@ -83,15 +86,20 @@ void GeoFacRunAction::BeginOfRunAction(const G4Run* aRun)
   
   //run info
   startTick = clock();
-  G4cout<<n<<" event to be processed"<<G4endl;
+  
+  
 }
 
 
 
 void GeoFacRunAction::EndOfRunAction(const G4Run* run)
 {
-  //G4int nofEvents = run->GetNumberOfEvent();
 
+  G4int nofEvents = run->GetNumberOfEvent();
+  G4cout<<"my job:"<<nofEvents<<G4endl;
+  G4cout<<"my hit"<<hits.GetValue()<<G4endl;
+  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->Merge();
 
 
   // Run conditions
@@ -113,17 +121,21 @@ void GeoFacRunAction::EndOfRunAction(const G4Run* run)
 
 
   //counting time
-  clock_t endTick = clock();
-  time_t deltaTick = endTick-startTick;
-  G4cout<<"It takes "<<deltaTick/CLOCKS_PER_SEC<<" s"<<G4endl;
+  if(IsMaster()){
+    clock_t endTick = clock();
+    time_t deltaTick = endTick-startTick;
+    G4cout<<"It takes "<<deltaTick/CLOCKS_PER_SEC<<" s"<<G4endl;
+    fMDAH->SetDeltaTick(deltaTick);
+    fMDAH->SetHit(hits.GetValue());
+    fMDAH->WriteToRecord();
+  }
 
-    // Data analysis
-  //G4cout<<fMDAH->GetHitCount()<<" in "<<fMDAH->GetTotalCount()<<" photon has hit the SiPD"<<G4endl;
-  fMDAH->SetDeltaTick(deltaTick);
-  fMDAH->WriteToRecord();
 
 
 }
 
+void GeoFacRunAction::AddHits(int n){
+  hits+=n;
+}
 
 

@@ -38,7 +38,7 @@ void MyDataAnalysisHelper::WriteToFile(){
         G4cout<<"Saving is off"<<G4endl;
         return;
     }
-    if(numThread!=1)ProcessRecord();
+    ProcessRecord();
 
 
 
@@ -93,7 +93,7 @@ void MyDataAnalysisHelper::WriteToRecord(){
 
 void MyDataAnalysisHelper::ProcessRecord(){
     vector<RunRecord> newRec;
-    int realNumThread = (numThread+1)*reapeatEachThread;
+    int realNumThread = reapeatEachThread;
     int n = record.size()/realNumThread;
     if(record.size()%realNumThread!=0){
         G4cout<<"ProcessRecord Error, skip processing"<<G4endl;
