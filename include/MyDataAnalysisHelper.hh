@@ -38,10 +38,15 @@ class MyDataAnalysisHelper{
         inline void SetRepeats(int num){reapeatEachThread = num;};
         inline void SetExperimentType(string t){experimentType = t;}
         static MyDataAnalysisHelper* GetInstance();
+        inline void __ADDTESTHIT__(){__TESTHIT__++;}
 
-        
+
+
+        int __TESTHIT__ ;
     
     private:
+
+        
 
         static MyDataAnalysisHelper* fInstance;
         int hitCount;

@@ -25,6 +25,7 @@ GeoFacEventAction::~GeoFacEventAction()
 
 void GeoFacEventAction::BeginOfEventAction(const G4Event*)
 {
+   fMDAH->__ADDTESTHIT__();
 }
 
 

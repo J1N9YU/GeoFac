@@ -32,6 +32,8 @@ GeoFacPrimaryGeneratorAction::GeoFacPrimaryGeneratorAction()
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticleEnergy(energy);
   isTestMode=false;
+
+  myHelper=MyDataAnalysisHelper::GetInstance();
 }
 
 
@@ -55,7 +57,11 @@ void GeoFacPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
 
   SetRandomOptPhotonPolar();
+
+  myHelper->__ADDTESTHIT__();
+
   fParticleGun->GeneratePrimaryVertex(anEvent);
+
 }
 
 G4ThreeVector GeoFacPrimaryGeneratorAction::GetRandomDirection(){

@@ -9,6 +9,8 @@
 #include "G4ParticleGun.hh"
 #include "globals.hh"
 
+#include"MyDataAnalysisHelper.hh"
+
 class G4ParticleGun;
 class G4Event;
 class G4Box;
@@ -36,6 +38,7 @@ class GeoFacPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ThreeVector GetSpecificPosition();
     void SetRandomOptPhotonPolar();
     inline void SetTestMode(bool mode){isTestMode=mode;}
+    MyDataAnalysisHelper* myHelper;
   
   private:
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class

@@ -42,6 +42,8 @@
 
 
 
+
+
 GeoFacRunAction::GeoFacRunAction()
 : G4UserRunAction()
 { 
@@ -62,6 +64,8 @@ GeoFacRunAction::~GeoFacRunAction()
 
 void GeoFacRunAction::BeginOfRunAction(const G4Run* aRun)
 { 
+
+
   // inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
@@ -69,6 +73,9 @@ void GeoFacRunAction::BeginOfRunAction(const G4Run* aRun)
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->Reset();
 
+  if(!IsMaster()){
+    return;
+  }
   //data analysis
   fMDAH->Clear();
   int n=aRun->GetNumberOfEventToBeProcessed();

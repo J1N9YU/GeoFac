@@ -43,7 +43,7 @@ int main(int argc,char** argv)
   // Construct the default run manager
   //
   int numTreads = 3;
-  int repeatEachThread =10 ;
+  int repeatEachThread =1 ;
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(numTreads);
@@ -103,7 +103,7 @@ int main(int argc,char** argv)
     if(fileName=="convergence"||fileName=="-c"){//main job
       
       
-      int start = 16;
+      int start = 26;
       int step = 1;
       int n = 15;
 
@@ -143,6 +143,8 @@ int main(int argc,char** argv)
       }
       myHelper->WriteToFile();
 
+    }else if(fileName=="-t"){
+      runManager->BeamOn(10000);
     }else{
       G4String command = "/control/execute ";    
       UImanager->ApplyCommand(command+fileName);

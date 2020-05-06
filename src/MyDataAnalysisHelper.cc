@@ -12,6 +12,7 @@ MyDataAnalysisHelper::MyDataAnalysisHelper(){
     numThread=1;
     reapeatEachThread = 1;
     experimentType = "undefined";
+
 }
 
 MyDataAnalysisHelper::~MyDataAnalysisHelper(){
