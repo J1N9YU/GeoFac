@@ -100,25 +100,37 @@ int main(int argc,char** argv)
 
   if ( ! ui ) { 
     G4String fileName = argv[1];
-    if(fileName=="convergence"||fileName=="-c"){
+    if(fileName=="convergence"||fileName=="-c"){//main job
+      
       
       int start = 16;
       int step = 1;
       int n = 15;
-      //source light geometry
+
+      //set geometry (source light)
       fDetectorConstruction->SetThicknessOfPMMA(0);
+
+      //inform myHelper of the experiment type, for data analysis use
       myHelper->SetExperimentType("source");
+
+      //simulation with variant event number
       for(int i=0;i<n;i++){
+
+        //generate event number
         int eventCnt = start + i*step;
         double p = (double)eventCnt/5.0;
         eventCnt = pow10(p);
+
+        //each thread may repeat same simulation for several times
         for(int j=0;j<repeatEachThread;j++){
           runManager->BeamOn(eventCnt);
         }
       }
+
+      //save data
       myHelper->WriteToFile();  
       
-      //remission light geometry
+      //mostly the same as above.
       fDetectorConstruction->SetThicknessOfPMMA(0.283*CLHEP::cm);
       myHelper->SetExperimentType("reemit");
       for(int i=0;i<n;i++){

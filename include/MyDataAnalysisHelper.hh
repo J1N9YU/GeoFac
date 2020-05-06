@@ -50,10 +50,10 @@ class MyDataAnalysisHelper{
         bool isSaving;
         int numThread;
         int reapeatEachThread;
-        vector<RunRecord> record;
+        vector<RunRecord> record;//data of runs
         string experimentType;
 
-        //Keeping the origin data of each run
+        //These two vectors duplicate from "record" after each simulation, keeping the origin data of each run.
         vector<RunRecord> GSourceV;
         vector<RunRecord> GReemitV;
 
