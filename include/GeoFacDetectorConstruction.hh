@@ -37,11 +37,18 @@
 #include "G4Cache.hh"
 #include "GeoFacPhotonDetSD.hh"
 #include "G4VisAttributes.hh"
+#include <map>
+#include "GeoFacDetectorConstructionMessnger.hh"
+
+using namespace std;
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class GeoFacMaterials;
 class G4VisAttributes;
+
+
+
 
 /// Detector construction class to define materials and geometry.
 
@@ -51,22 +58,45 @@ class GeoFacDetectorConstruction : public G4VUserDetectorConstruction
     GeoFacDetectorConstruction();
     virtual ~GeoFacDetectorConstruction();
 
+
+
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
     G4Material* FindMaterial(G4String);
 
     inline G4double GetThicknessOfPMMA(){return thicknessOfPMMA;}
-    void SetIsOriginModel(bool);
+
     void SetThicknessOfPMMA(G4double num);
+    void SetphotodiodeEdge(G4double num);
+
+    //building geometry 
     void ConstructPMMA();
+    void ConstructSiPD();
+    void ConstructSource();
+
+    
+
+    map<string,double> GetParameterTable();
+    
 
   protected:
     GeoFacMaterials* fMaterials;
     G4Cache<GeoFacPhotonDetSD*> fmppcSD;
+
+    //Parameters
     G4double thicknessOfPMMA;
-    G4VPhysicalVolume* PMMA_pv;
+    G4double sourceRadius;
+    G4double photodiodeEdge;
+    
+    //Vloumes
     G4LogicalVolume* logicWorld;
-    bool isOriginModel;
+    G4VPhysicalVolume* PMMA_pv;
+    G4VPhysicalVolume* SiPD_pv;
+
+    //Messenager
+    GeoFacDetectorConstructionMessenger* fDCM;
+
+
 
 };
 

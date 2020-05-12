@@ -9,6 +9,9 @@
 #include <algorithm>
 #include <iomanip>
 #include <numeric>
+#include <map>
+#include "GeoFacDetectorConstruction.hh"
+#include "G4RunManager.hh"
 
 
 using namespace std;
@@ -20,6 +23,11 @@ typedef struct RnuRecord{
     double stdev;
     clock_t comsumedTick;
 }RunRecord;
+
+typedef struct JobRecord{
+    map<string,double> parameters;
+    double result;
+}JobRecord;
 
 class MyDataAnalysisHelper{
     public:
@@ -40,11 +48,11 @@ class MyDataAnalysisHelper{
         inline void SetRepeats(int num){reapeatEachThread = num;};
         inline void SetExperimentType(string t){experimentType = t;}
         static MyDataAnalysisHelper* GetInstance();
-        inline void __ADDTESTHIT__(){__TESTHIT__++;}
+        void SimulateForGeometryFactor(int eventCnt = 10000);
 
 
 
-        int __TESTHIT__ ;
+
     
     private:
 
@@ -60,13 +68,18 @@ class MyDataAnalysisHelper{
         vector<RunRecord> record;//data of runs
         string experimentType;
 
-        //These two vectors duplicate from "record" after each simulation, keeping the origin data of each run.
+        //These two vectors duplicate from repective "record" after source or reemit simulation, keeping the origin data.
         vector<RunRecord> GSourceV;
         vector<RunRecord> GReemitV;
+
+        //Storing result of jobs
+        vector<JobRecord> jobs;
+        
 
         //process data
         void ProcessRecord();
         vector<RunRecord> GetRunRatio(vector<RunRecord> a,vector<RunRecord> b);
+        JobRecord GetLatestJobRecord();
         
 
 

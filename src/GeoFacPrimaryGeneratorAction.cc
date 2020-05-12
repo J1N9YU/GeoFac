@@ -58,7 +58,7 @@ void GeoFacPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   SetRandomOptPhotonPolar();
 
-  myHelper->__ADDTESTHIT__();
+  
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 

@@ -20,6 +20,7 @@
 #include "G4OpticalSurface.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4SurfaceProperty.hh"
+#include "GeoFacDetectorConstructionMessnger.hh"
 
 
 GeoFacDetectorConstruction::GeoFacDetectorConstruction()
@@ -27,22 +28,24 @@ GeoFacDetectorConstruction::GeoFacDetectorConstruction()
 {
   fMaterials = GeoFacMaterials::GetInstance();
   thicknessOfPMMA = 0.0*cm;
+  photodiodeEdge = 0.26*cm;
   PMMA_pv = NULL;
-  isOriginModel=false;
+  SiPD_pv = NULL;
+  fDCM = new GeoFacDetectorConstructionMessenger(this);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GeoFacDetectorConstruction::~GeoFacDetectorConstruction()
-{ }
+{ 
+  delete fDCM;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
-{  
-  // Get nist material manager
-  G4NistManager* nist = G4NistManager::Instance();
-  
+{    
   // construct materials via constructor
   
   
@@ -86,34 +89,8 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
   //----------------------------------------------------------------------    
   //SiPD
   //----------------------------------------------------------------------
-  { 
-  G4double dim_x = 0.26*cm;
-  G4double dim_y = 0.05*cm;
-  G4double dim_z = 0.26*cm;
-  G4ThreeVector pos = G4ThreeVector(0*cm, dim_y, 0*cm);
 
-  G4Material* SiPD_mat = FindMaterial("SiPD");
-
-  G4Box* SiPDbox = new G4Box("SiPDsolid",dim_x,dim_y,dim_z);
-                      
-  G4LogicalVolume* SiPD_lv =                         
-    new G4LogicalVolume(SiPDbox,         //its solid
-                        SiPD_mat,          //its material
-                        "SiPD_lv");           //its name
-               
-  new G4PVPlacement(0,                       //no rotation
-                    pos,                    //at position
-                    SiPD_lv,             //its logical volume
-                    "SiPD_pl",                //its name
-                    logicWorld,                //its mother  volume
-                    false,                   //no boolean operation
-                    0,                       //copy number
-                    false);          //overlaps checking
-
-
-  }
-
-
+  ConstructSiPD();
   
   //----------------------------------------------------------------------    
   // PMMA
@@ -124,7 +101,7 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
   //----------------------------------------------------------------------    
   // shell edge (SHELL1)
   //----------------------------------------------------------------------
-  if(!isOriginModel)
+
   {
   G4double innerRaduis = 0.5*cm;
   G4double outerRadius = 0.55*cm;
@@ -159,7 +136,7 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
   //----------------------------------------------------------------------    
   // shell buttom (SHELL2)
   //----------------------------------------------------------------------
-  if(!isOriginModel)
+
   {
   G4double innerRaduis = 0.0*cm;
   G4double outerRadius = 0.6*cm;
@@ -196,7 +173,7 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
   //----------------------------------------------------------------------    
   //PCB
   //----------------------------------------------------------------------
-  if(!isOriginModel)
+
   { 
   G4double dim_x = 5.0*cm;
   G4double dim_y = 0.1*cm;
@@ -244,14 +221,6 @@ G4VPhysicalVolume* GeoFacDetectorConstruction::Construct()
   G4MaterialPropertiesTable* SMPT = new G4MaterialPropertiesTable();
   SMPT -> AddProperty("REFLECTIVITY",pp,reflectivity,NUM); 
   opSurface -> SetMaterialPropertiesTable(SMPT);
-
-
-
-
-
-  
-
-
   }
   return physWorld;
 }
@@ -274,6 +243,12 @@ void GeoFacDetectorConstruction::ConstructSDandField(){
 void GeoFacDetectorConstruction::SetThicknessOfPMMA(G4double num){
   thicknessOfPMMA = num;
   ConstructPMMA();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+}
+
+void GeoFacDetectorConstruction::SetphotodiodeEdge(G4double num){
+  photodiodeEdge = num;
+  ConstructSiPD();
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
@@ -307,6 +282,39 @@ void GeoFacDetectorConstruction::ConstructPMMA(){
   }
 }
 
-void GeoFacDetectorConstruction::SetIsOriginModel(bool is){
-  isOriginModel=is;
+void GeoFacDetectorConstruction::ConstructSiPD(){
+  if(SiPD_pv!=NULL)delete SiPD_pv;
+  G4double dim_x = photodiodeEdge;
+  G4double dim_y = 0.05*cm;
+  G4double dim_z = photodiodeEdge;
+  G4ThreeVector pos = G4ThreeVector(0*cm, dim_y, 0*cm);
+
+  G4Material* SiPD_mat = FindMaterial("SiPD");
+
+  G4Box* SiPDbox = new G4Box("SiPDsolid",dim_x,dim_y,dim_z);
+                      
+  G4LogicalVolume* SiPD_lv =                         
+    new G4LogicalVolume(SiPDbox,         //its solid
+                        SiPD_mat,          //its material
+                        "SiPD_lv");           //its name
+               
+  SiPD_pv = new G4PVPlacement(0,                       //no rotation
+                    pos,                    //at position
+                    SiPD_lv,             //its logical volume
+                    "SiPD_pl",                //its name
+                    logicWorld,                //its mother  volume
+                    false,                   //no boolean operation
+                    0,                       //copy number
+                    false);          //overlaps checking
+
+
 }
+
+map<string,double> GeoFacDetectorConstruction::GetParameterTable(){
+  map<string,double> temp;
+  temp["D"] = thicknessOfPMMA + 0.3*cm;
+  temp["L"] = photodiodeEdge;
+  temp["R"] = sourceRadius;
+  return temp;
+}
+

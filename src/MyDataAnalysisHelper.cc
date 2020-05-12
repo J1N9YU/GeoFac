@@ -40,20 +40,28 @@ void MyDataAnalysisHelper::WriteToFile(){
     }
     ProcessRecord();
 
-
-
     //Writeing record to file
     G4cout<<"saving result to file..."<<G4endl;
     ofstream file("ResultData",ios::app);
+
     //get time
     time_t now = time(NULL);
     tm* now_tm= localtime(&now);
     string now_str = asctime(now_tm);
+
     //wtrite table head
+    GeoFacDetectorConstruction* dc = (GeoFacDetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+    map<string,double> pt = dc->GetParameterTable();
     file<<endl<<now_str<<"type = "<<experimentType<<endl;
+    file<<"Patameters: "<<endl;
+    for(auto p:pt){
+        file<<p.first<<"="<<p.second<<"\t";
+    }
+    file<<endl;
     file<<"index\ttotal\thit\tratio\ttime\t";
     if(numThread!=1)file<<"stdev\tnumTread = "<<numThread;
     file<<endl;
+
     //write data
     int i=0;
     for(auto r:record){
@@ -61,7 +69,8 @@ void MyDataAnalysisHelper::WriteToFile(){
         if(numThread!=1)file<<"\t"<<r.stdev;
         file<<endl;
     }
-    //Write final result
+
+    //if reemit and source simulation jub are done, calculate geometry factor
     if(!GReemitV.empty()&&!GSourceV.empty()){
         record=GetRunRatio(GReemitV,GSourceV);
         ProcessRecord();
@@ -69,10 +78,9 @@ void MyDataAnalysisHelper::WriteToFile(){
         for(auto r:record){
             file<<r.total<<"\t"<<r.ratio<<"\t"<<r.stdev<<"\t"<<r.comsumedTick/CLOCKS_PER_SEC<<endl;
         }
+        jobs.push_back(GetLatestJobRecord());
     }
     record.clear();
-
-
 
 
     file.close();
@@ -91,7 +99,7 @@ void MyDataAnalysisHelper::WriteToRecord(){
     record.push_back(rec);
 }
 
-void MyDataAnalysisHelper::ProcessRecord(){
+void MyDataAnalysisHelper::ProcessRecord(){//mergin
     vector<RunRecord> newRec;
     int realNumThread = reapeatEachThread;
     int n = record.size()/realNumThread;
@@ -156,4 +164,30 @@ vector<RunRecord> MyDataAnalysisHelper::GetRunRatio(vector<RunRecord> a,vector<R
         newRec.push_back(r);
     }
     return newRec;
+}
+
+JobRecord MyDataAnalysisHelper::GetLatestJobRecord(){
+    JobRecord jb;
+    GeoFacDetectorConstruction* fDetectorConstrution=(GeoFacDetectorConstruction*)(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    jb.parameters = fDetectorConstrution->GetParameterTable();
+    jb.result = record[record.size()-1].ratio;
+    return jb;
+}
+
+void MyDataAnalysisHelper::SimulateForGeometryFactor(int eventCnt){
+      GeoFacDetectorConstruction* fDetectorConstruction=(GeoFacDetectorConstruction*)(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+      int temp = reapeatEachThread;
+      reapeatEachThread = 1;
+      G4RunManager* runManager = G4RunManager::GetRunManager();
+      //source
+      fDetectorConstruction->SetThicknessOfPMMA(0);
+      SetExperimentType("source");
+      runManager->BeamOn(100000);
+      WriteToFile();
+      //reemit
+      fDetectorConstruction->SetThicknessOfPMMA(0.283*CLHEP::cm);
+      SetExperimentType("reemit");
+      runManager->BeamOn(100000);
+      WriteToFile();
+      reapeatEachThread = temp;
 }

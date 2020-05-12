@@ -58,8 +58,6 @@ G4Material* GeoFacMaterials::GetMaterial(const G4String material)
 void GeoFacMaterials::CreateMaterials()
 {
   G4double density;
-  G4int ncomponents;
-  G4double fractionmass;
   std::vector<G4int> natoms;
   std::vector<G4double> fractionMass;
   std::vector<G4String> elements;
@@ -161,14 +159,6 @@ void GeoFacMaterials::CreateMaterials()
 
   assert(sizeof(absGeoFacfiber) == sizeof(photonEnergy));
 
-  G4double emissionFib[] =
-  {0.05, 0.10, 0.30, 0.50, 0.75, 1.00, 1.50, 1.85, 2.30, 2.75,
-   3.25, 3.80, 4.50, 5.20, 6.00, 7.00, 8.50, 9.50, 11.1, 12.4,
-   12.9, 13.0, 12.8, 12.3, 11.1, 11.0, 12.0, 11.0, 17.0, 16.9,
-   15.0, 9.00, 2.50, 1.00, 0.05, 0.00, 0.00, 0.00, 0.00, 0.00,
-   0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00};
-
-  assert(sizeof(emissionFib) == sizeof(photonEnergy));
 
   // Add entries into properties table
   G4MaterialPropertiesTable* mptGeoFacfiber = new G4MaterialPropertiesTable();
@@ -211,14 +201,6 @@ void GeoFacMaterials::CreateMaterials()
   // Metal
   //--------------------------------------------------
 
-   G4double refractiveIndexClad2[] =
-   { 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42};
-
-   assert(sizeof(refractiveIndexClad2) == sizeof(photonEnergy));
 
   // Add entries into properties table
   G4MaterialPropertiesTable* mptClad2 = new G4MaterialPropertiesTable();

@@ -72,7 +72,6 @@ int main(int argc,char** argv)
   // Detector construction
   runManager->SetUserInitialization(new GeoFacDetectorConstruction());
   GeoFacDetectorConstruction* fDetectorConstruction = (GeoFacDetectorConstruction*)runManager->GetUserDetectorConstruction();
-  fDetectorConstruction->SetIsOriginModel(false);
 
   // Physics list
   G4VModularPhysicsList* physicsList = new LBE;
@@ -161,10 +160,17 @@ int main(int argc,char** argv)
 
       G4cout<<numTreads<<" Theands, repeat "<<repeatEachThread<<" times"<<G4endl;
 
-    }else if(fileName=="-t"){
+    }
+    else if(fileName=="-t"){
+      //quick test
       runManager->BeamOn(2);
       myHelper->WriteToFile();
-    }else{
+    }
+    else if(fileName=="-g"){
+      //Simplfied version of "-c"
+      myHelper->SimulateForGeometryFactor(10000);
+    }
+    else{
       G4String command = "/control/execute ";    
       UImanager->ApplyCommand(command+fileName);
     }
