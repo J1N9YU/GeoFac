@@ -25,6 +25,8 @@
 #include "globals.hh"
 #include "G4GeometryManager.hh"
 #include "GeoFacPrimaryGeneratorAction.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
@@ -40,10 +42,24 @@ int main(int argc,char** argv)
   // Choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
-  // Construct the default run manager
-  //
+
+
+  //setting thread num
+
   int numTreads = 3;
   int repeatEachThread =5 ;
+  if(argc>=3){
+    G4String par = argv[1];
+    if(par=="-c"){
+      string nt = argv[2];
+      numTreads = atoi(nt.c_str());
+      if(argc>=4){
+        repeatEachThread = atoi(argv[3]);
+      }
+    }
+    
+  }
+  // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(numTreads);
@@ -119,7 +135,7 @@ int main(int argc,char** argv)
         //generate event number
         int eventCnt = start + i*step;
         double p = (double)eventCnt/5.0;
-        eventCnt = pow10(p);
+        eventCnt = pow(10,p);
 
         //each thread may repeat same simulation for several times
         for(int j=0;j<repeatEachThread;j++){
@@ -136,15 +152,17 @@ int main(int argc,char** argv)
       for(int i=0;i<n;i++){
         int eventCnt = start + i*step;
         double p = (double)eventCnt/5.0;
-        eventCnt = pow10(p);
+        eventCnt = pow(10,p);
         for(int j=0;j<repeatEachThread;j++){
           runManager->BeamOn(eventCnt);
         }
       }
       myHelper->WriteToFile();
 
+      G4cout<<numTreads<<" Theands, repeat "<<repeatEachThread<<" times"<<G4endl;
+
     }else if(fileName=="-t"){
-      runManager->BeamOn(10000);
+      runManager->BeamOn(2);
       myHelper->WriteToFile();
     }else{
       G4String command = "/control/execute ";    
@@ -160,6 +178,8 @@ int main(int argc,char** argv)
     ui->SessionStart();
     delete ui;
   }
+
+
 
   delete visManager;
   delete runManager;
